@@ -1,0 +1,7 @@
+{
+  "name": "map_editor",
+  "version": "1.0.0",
+  "dependencies": {
+    "electron": "latest"
+  }
+}

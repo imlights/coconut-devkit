@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map Editor</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="./scripts/mapeditor.js"></script>
+</head>
+<body>
+<div id="control">
+    <div id="mode">
+        <button id="tiles" class="view focused">Map View</button>
+        <button id="script" class="view">Script Editor</button>
+        <button id="lights" class="view">Lighting Mode</button>
+        <button id="sounds" class="view">Soundscape View</button>
+        <button id="meta" class="view">Metadata</button>
+    </div>
+    <div id="tile-control" class="tilesview viewmode">
+        <button id="newtileset">New Tileset</button>
+        <button id="loadtileset">Load Tileset</button>
+        <div id="tiles-picker"></div>
+    </div>
+</div>
+<div id="mapview">
+    <canvas id="main"></canvas>
+</div>
+</body>
+</html>

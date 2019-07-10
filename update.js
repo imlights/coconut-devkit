@@ -23,32 +23,32 @@ function run(cmd) {
 
 function TryUpdate() {
     return new Promise(async (resolve, reject) => {
+        let foundupdate = false;
         let [c, out, err] = await run("git fetch");
-        console.log(c);
-        console.log(out);
-        console.log(err);
         if (c && c !== 0) {
             console.error("Crash while fetching update from Repo.");
             return reject(c);
-        } else {
+        } else if (err && err !== "") {
             console.log(err); // Not actually an Error
-            
+            foundupdate = true;
         }
-        if (!out && !err) {
+
+        if (!foundupdate) {
             console.log("No updates to fetch from Repo.");
             return resolve(true);
-        }
-
-        /*
-        [c, out, err] = await run("git pull origin master");
-        if (c || err) {
-            console.error("Crash while pulling new source files");
-            return reject(c);
         } else {
-            return resolve(true);
+            [c, out, err] = await run("git pull origin master");
+            if (c && c !== 0) {
+                console.error("Crash while pulling new source files");
+                return reject(c);
+            } else if (err) {
+                console.log(err);
+                return reject(0);
+            } else if (out && out !== 0) {
+                console.log(out);
+                resolve(true);
+            }
         }
-        */
-
     }).catch((err) => {
         console.error("err: " + err);
         return false;

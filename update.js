@@ -9,6 +9,7 @@ UpdateMain();
 function run(cmd) {
     return new Promise((resolve, reject) => {
         child_process.exec(cmd, (err, stdout, stderr) => {
+            //console.log(`DEBUG: output for '${cmd}': \nerr: ${err}\nstdout: ${stdout}\nstderr: ${stderr}`)
             if (err)
                 reject([err && err.code || 0, stdout, stderr]);
             else
@@ -23,15 +24,22 @@ function run(cmd) {
 function TryUpdate() {
     return new Promise(async (resolve, reject) => {
         let [c, out, err] = await run("git fetch");
-        if (c) {
+        console.log(c);
+        console.log(out);
+        console.log(err);
+        if (c && c !== 0) {
             console.error("Crash while fetching update from Repo.");
             return reject(c);
+        } else {
+            console.log(err); // Not actually an Error
+            
         }
         if (!out && !err) {
             console.log("No updates to fetch from Repo.");
             return resolve(true);
         }
 
+        /*
         [c, out, err] = await run("git pull origin master");
         if (c || err) {
             console.error("Crash while pulling new source files");
@@ -39,6 +47,7 @@ function TryUpdate() {
         } else {
             return resolve(true);
         }
+        */
 
     }).catch((err) => {
         console.error("err: " + err);

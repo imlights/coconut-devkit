@@ -1,5 +1,6 @@
 var editorState;
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, remote } = require("electron");
+window.$ = window.jQuery = remote.require("jquery");
 
 ipcRenderer.on("getState", function() {
     event.returnValue = editorState;

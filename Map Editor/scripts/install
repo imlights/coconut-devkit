@@ -1,0 +1,14 @@
+"use strict";
+
+const electron = require("electron");
+const path = require("path");
+const Installer = require("electron-winstaller");
+console.log(process.cwd());
+const output = Installer.createWindowsInstaller({
+    appDirectory: path.join(process.cwd(), "DevKit"),
+    oututDirectory: path.join(process.cwd(), "DevKit"),
+    authors: "Lights",
+    exe: "Coconut Devkit.exe"
+});
+
+output.then(() => console.log("Installer Build"), (e) => console.error(e));

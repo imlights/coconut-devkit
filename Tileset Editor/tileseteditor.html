@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="tabid" content="tileseteditor">
+    <title>DevKit - Tileset Editor</title>
+    <script>window.$ = window.jQuery = require("jquery");</script>
+    <script src="./scripts/tileseteditor.js"></script>
+</head>
+<body>
+    <div id="editor"></div>
+    <div id="control">
+        <button id="new">New Tileset</button>
+        <button id="save">Save Tileset</button>
+        <button id="load">Load Tileset</button>
+        <button id="export">Export Tileset</button><br>
+    </div>
+    <div class="container invisible">
+        <div id="view">
+            <button id="addimage">Load Image</button>
+            <button id="addtile">Add Tile</button>
+            <br>
+            <span id="tilesetname"></span>
+            <span id="tilesetpath"></span>
+            <div id="list"></div>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+</html>

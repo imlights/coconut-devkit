@@ -1,7 +1,12 @@
 {
-  "name": "map_editor",
+  "name": "coconut_devkit",
   "version": "1.0.0",
   "dependencies": {
-    "electron": "latest"
+    "electron": "latest",
+    "jquery": "3.4.1"
+  },
+  "scripts": {
+    "start": "electron electron-main.js",
+    "update": "electron update.js"
   }
 }

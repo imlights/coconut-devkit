@@ -1,10 +1,7 @@
-const {
-    app,
-    BrowserWindow,
-    ipcMain
-} = require("electron");
+"use strict";
 
-const Windows = [];
+const { app, BrowserWindow, ipcMain } = require("electron");
+let Window;
 const editor = {
     focused: 0,
     states: {
@@ -51,11 +48,14 @@ const editor = {
     }
 };
 
-app.on("ready", () => {
-    Windows.push(new BrowserWindow({
+function spawnWindow() {
+    Window = new BrowserWindow({
         height: 600,
-        width: 800
-    }));
+        width: 800,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
 
     ipcMain.on("querytabs", (event) => {
         event.returnValue = Editor.tabs.map(function(value) {
@@ -63,18 +63,19 @@ app.on("ready", () => {
         })
     });
 
-    ipcMain.on("tab", (event, flag, ...args) {
+    ipcMain.on("tab", (event, flag, args) => {
+        console.log(flag, args);
         switch(flag) {
             case "add":
                 if (Editor.tabExists(args[0])) break;
                 Editor.tabs.push({
-                    id: args[0]
+                    id: args[0],
                     name: Editor.tools[args[0]].name,
                     data: {}
                 });
                 Editor.states[args[0]] = event.sender.sendSync("getState");
                 Editor.focused = Editor.tabs.length - 1;
-                Windows[0].loadURL(`file://${__dirname}/${args[0]}.html`);
+                Window.loadURL(`file://${__dirname}/${args[0]}.html`);
                 break;
             case "remove":
                 if (Editor.states[args[0]] !== event.sender.sendSync("getState"))
@@ -86,15 +87,17 @@ app.on("ready", () => {
                 if (Editor.focused === Editor.tabIndex(args[1])) break;
                 Editor.states[args[0]] = event.sender.sendSync("getState");
                 Editor.focused = Editor.tabIndex(args[1]);
-                Windows[0].loadFile("./html/" + args[1] + ".html", { query: { data: Editor.states[args[1]] } });
+                Window.loadFile("./html/" + args[1] + ".html", { query: { data: Editor.states[args[1]] } });
                 break;
         }
     });
 
     ipcMain.on("confirmsave", (event, ...args) => editor.removeTab(args[0]))
 
-    Windows[0].loadURL("file://" + __dirname + "/index.html");
-});
+    Window.loadURL("file://" + __dirname + "/index.html");
+}
+
+app.on("ready", spawnWindow);
 
 // TODO - implement tabs for windows
 // TODO - save editor states

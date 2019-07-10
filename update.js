@@ -2,53 +2,46 @@
 
 console.log("Checking for Updates...");
 
-const http = require("http");
-const fs = require("fs");
-const v = (() => {
-    let out;
-    try {
-        out = fs.readFileSync("./package.json", "utf-8");
-        out = JSON.parse(out);
-    } catch (e) {
-        console.error(e);
-        process.exit();
-    }
-    return out;
-})();
+UpdateMain();
 
-function Update() {
+function run(cmd) {
     return new Promise((resolve, reject) => {
-        resolve(true);
+        child_process.exec(cmd, (err, stdout, stderr) => {
+            resolve([err && err.code || 0, stdout, stderr]);
+        });
+    });
+}
+
+function TryUpdate() {
+    return new Promise(async (resolve, reject) => {
+        let [c, out, err] = await run("git fetch");
+        if (c) {
+            console.error("Crash while fetching update from Repo.");
+            return resolve(false);
+        }
+        if (!out && !err) {
+            console.log("No updates to fetch from Repo.");
+            return resolve(true);
+        }
+
+        [c, out, err] = await run("git pull origin master");
+        if (c || err) {
+            console.error("Crash while pulling new source files");
+            return resolve(false);
+        } else {
+            return resolve(true);
+        }
+
     }).catch((err) => console.error);
 }
 
-const req = http.request({
-    hostname: "",
-    port: 80,
-    path: "/",
-    method: "POST",
-    headers: {
-        Content-Type: "plain-text",
-        Content-Length: Buffer.byteLength(`version,${v}`);
-    },
-    agent: false
-}, async (response) => {
-    response.setEncoding("utf-8");
-    res.on("data", (buffer) => {
-        let data = buffer.toString();
-        if (data === "update") {
-            console.log("New version found, updating...");
-            await Update();
-        }
-        console.log("Devkit up to date, launching...");
-        require("./electron-main");
-    })
-});
-
-req.on("error", (e) => {
-    console.error("Fatal Error Launching Devkit auto-update");
-    console.error(e.message);
-    process.exit();
-});
-
-
+async function UpdateMain() {
+    let returnValue = await TryUpdate();
+    if (returnValue) {
+        console.log("Autoupdate successfully exited, launching...");
+        require("electron-main");
+    } else {
+        console.error("Autoupdate closed with an error, Unable to launch.");
+        process.exit();
+    }
+}

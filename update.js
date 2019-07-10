@@ -42,12 +42,9 @@ function TryUpdate() {
             if (c && c !== 0) {
                 console.error("Crash while pulling new source files");
                 return reject(c);
-            } else if (err) {
+            } else if (err && err !== 0) {
                 console.log(err);
-                return reject(0);
-            } else if (out && out !== 0) {
-                console.log(out);
-                resolve(true);
+                return resolve(true);
             }
         }
     }).catch((err) => {

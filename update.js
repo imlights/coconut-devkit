@@ -8,6 +8,7 @@ UpdateMain();
 
 function run(cmd) {
     return new Promise((resolve, reject) => {
+        console.log(`executing '${cmd}'`);
         child_process.exec(cmd, (err, stdout, stderr) => {
             //console.log(`DEBUG: output for '${cmd}': \nerr: ${err}\nstdout: ${stdout}\nstderr: ${stderr}`)
             if (err)

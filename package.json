@@ -7,6 +7,6 @@
   },
   "scripts": {
     "start": "electron electron-main.js",
-    "update": "electron update.js"
+    "update-kit": "electron update.js"
   }
 }

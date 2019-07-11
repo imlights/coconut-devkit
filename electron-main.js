@@ -1,5 +1,9 @@
 "use strict";
 
+console.log("Launching electron app...");
+
+require("./update.js")();
+
 const { app, BrowserWindow, ipcMain } = require("electron");
 let Window;
 const editor = {
@@ -49,6 +53,7 @@ const editor = {
 };
 
 function spawnWindow() {
+    console.log("Spawning Electron Window...");
     Window = new BrowserWindow({
         height: 600,
         width: 800,

@@ -6,7 +6,6 @@
     "jquery": "3.4.1"
   },
   "scripts": {
-    "start": "electron electron-main.js",
-    "update-kit": "electron update.js"
+    "start": "electron electron-main.js"
   }
 }

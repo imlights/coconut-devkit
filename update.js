@@ -4,8 +4,6 @@ const child_process = require("child_process");
 
 console.log("Checking for Updates...");
 
-UpdateMain();
-
 function run(cmd) {
     return new Promise((resolve, reject) => {
         console.log(`executing '${cmd}'`);
@@ -58,7 +56,7 @@ async function UpdateMain() {
         let returnValue = await TryUpdate();
         if (returnValue) {
             console.log("Autoupdate successfully exited, launching...");
-            require("./electron-main");
+            return true;
         } else {
             console.error("Autoupdate closed with an error, Unable to launch.");
             process.exit();
@@ -69,3 +67,5 @@ async function UpdateMain() {
         process.exit();
     }
 }
+
+module.exports = UpdateMain;

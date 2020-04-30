@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "electron": "latest",
-    "jquery": "3.4.1"
+    "jquery": "3.5.0"
   },
   "scripts": {
     "start": "electron electron-main.js"
